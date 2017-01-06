@@ -42,20 +42,18 @@ if __name__ == "__main__":
     pm = PMManager(url)
     pm.ThreadFunction()
     li = pm.GetQue()
+    #获取第一个内容
     ans = li[0]
+    #获取当前时间，并且转化为datetime格式
     now = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
-
-
-
-
-    config = {
+    #数据库配置，172内网地址
+    config ={
     'user': 'root',
     'password': 'root',
     'host': '172.18.128.189',
     'database':'pmdb'
     }
-
-
+    #数据库操作
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
     cursor.execute('insert into pm_data (ParamID,InsertTime,ParamValue) values (%s,%s,%s)', [1,now,ans])
