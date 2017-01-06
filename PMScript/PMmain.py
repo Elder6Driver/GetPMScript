@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import urllib.request
 import threading
 import queue
+import mysql.connector
+import time
 
 class PMManager(object):
     #默认构造的时候放入url
@@ -40,8 +42,26 @@ if __name__ == "__main__":
     pm = PMManager(url)
     pm.ThreadFunction()
     li = pm.GetQue()
-    for item in li:
-        print(item)
+    ans = li[0]
+    now = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+
+
+
+
+    config = {
+    'user': 'root',
+    'password': 'root',
+    'host': '172.18.128.189',
+    'database':'pmdb'
+    }
+
+
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    cursor.execute('insert into pm_data (ParamID,InsertTime,ParamValue) values (%s,%s,%s)', [1,now,ans])
+
+    conn.commit()
+    cursor.close()
 
 
 
